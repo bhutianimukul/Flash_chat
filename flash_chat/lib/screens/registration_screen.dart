@@ -18,6 +18,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth=FirebaseAuth.instance;
   String email;
   String password;
+ final  emailController=TextEditingController();
+  final  PassController=TextEditingController();
+   final  ImageController=TextEditingController();
+
+   //ToDO
   @override
   Widget build(BuildContext context) {
      void  showDialogScreen(){
@@ -49,8 +54,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               SizedBox(
                 height: 40.0,
+              ),Center(
+                child: CircleAvatar(
+                  child: Text('Hello'),
+                ),
               ),
               TextField(
+                controller: emailController,
                 textAlign: TextAlign.center,
                 keyboardType: TextInputType.emailAddress,
                 style: TextStyle(color: Colors.black),
@@ -79,7 +89,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 8.0,
               ),
               TextField(
-              
+              controller: PassController,
                 onChanged: (value) {
                   //Do something with the user input.
                   password=value;
@@ -87,6 +97,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 style: TextStyle(color: Colors.black),
 textAlign: TextAlign.center,
 obscureText: true,
+
                 decoration: InputDecoration(
             
                   hintText: 'Enter your password',
@@ -110,6 +121,9 @@ obscureText: true,
                 height: 5.0,
               ),
               UiButtons(text: 'Register', fn: ()async{
+     if(emailController.text.isEmpty|| PassController.text.isEmpty){
+       showDialogScreen();
+     }else{
                 try{ 
                   setState(() {
                                       _showSpinner=true;
@@ -121,7 +135,7 @@ obscureText: true,
         User loguser=newUser.user;
 print(loguser.email);
             if(newUser!=null){
-              Navigator.pushNamed(context, ChatScreen.routeName , arguments: loguser);
+              Navigator.pushReplacementNamed(context, ChatScreen.routeName , arguments: loguser);
             }
               }catch(error){
               
@@ -129,9 +143,9 @@ print(loguser.email);
              setState(() {
                               _showSpinner=false;
                             });
-             
+              }
               }} , color: Colors.blueAccent,)
-              
+                 
             ],
           ),
         ),

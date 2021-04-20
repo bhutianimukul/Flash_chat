@@ -121,7 +121,7 @@ setState(() {
 User loguser=user.user;
 //print(loguser.email);
 if(user!=null){
-  Navigator.pushNamed(context, ChatScreen.routeName , arguments: loguser);
+  Navigator.pushReplacementNamed(context, ChatScreen.routeName , arguments: loguser);
 
 }
 }

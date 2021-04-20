@@ -1,25 +1,29 @@
+
+import 'package:flash_chat/Components/stream_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/scheduler.dart';
 
+  final _firestore = FirebaseFirestore.instance;
 class ChatScreen extends StatefulWidget {
-   static const routeName='/chat';
+  static const routeName = '/chat';
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  var scrollController=ScrollController();
+ 
   String messageText;
-  
-  final _firestore=FirebaseFirestore.instance;
+final messageController=TextEditingController();
   @override
-    
-  final _auth=FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
 
 //   void getUser() async{
 //     try{
-//       final user= await _auth.currentUser; 
+//       final user= await _auth.currentUser;
 //       if(user!=null){
 // loggedInUser=user;
 //    print(loggedInUser.email);
@@ -30,41 +34,41 @@ class _ChatScreenState extends State<ChatScreen> {
 //     }
 
 //   }
-void getMessages()async{
-final extractedData=await _firestore.collection('messages').get();
+  // void getMessages() async {
+  //   final extractedData = await _firestore.collection('messages').get();
 
-for(var messages in extractedData.docs){
-  print(messages.data());
-}
-  
-}
-void messageStream() async{
-  final extractedData= _firestore.collection('messages').snapshots();
-  await for(var snapshot in extractedData){
+  //   for (var messages in extractedData.docs) {
+  //     print(messages.data());
+  //   }
+  // }
 
-    for(var messages in snapshot.docs){
-      print(messages.data());
+  // void messageStream() async {
+  //   final extractedData = _firestore.collection('messages').snapshots();
+  //   await for (var snapshot in extractedData) {
+  //     for (var messages in snapshot.docs) {
+  //       print(messages.data());
+  //     }
+  //   }
+  // }
 
-    }
-
-
-  }
-
-}
   @override
   Widget build(BuildContext context) {
-    User loggedInUser=ModalRoute.of(context).settings.arguments;
-    
+    User loggedInUser = ModalRoute.of(context).settings.arguments;
+final scrollController=ScrollController();
     print(loggedInUser.email);
     return Scaffold(
+      
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         leading: null,
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
                 //Implement logout functionality
-                messageStream();
+                _auth.signOut();
+
+                Navigator.pop(context);
               }),
         ],
         title: Text('⚡️Chat'),
@@ -72,9 +76,12 @@ void messageStream() async{
       ),
       body: SafeArea(
         child: Column(
+          
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+
+            StreamMessage(loggedInUser),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -82,18 +89,24 @@ void messageStream() async{
                 children: <Widget>[
                   Expanded(
                     child: TextField(
-                      onChanged: (value) 
-                      {
-                        messageText=value;
+                      scrollController:scrollController ,
+                      controller: messageController,
+                      onChanged: (value) {
+                        messageText = value;
                         //Do something with the user input.
                       },
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
+                  
                   FlatButton(
                     onPressed: () {
-_firestore.collection('messages').add({'sender':loggedInUser.email , 'text': messageText});
+                      
+                      _firestore.collection('messages').add(
+                          {'sender': loggedInUser.email, 'text': messageText , 'date': Timestamp.now()});
                       //Implement send functionality.
+                      messageController.clear();
+                     
                     },
                     child: Text(
                       'Send',
