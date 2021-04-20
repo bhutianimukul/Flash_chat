@@ -1,39 +1,44 @@
+import 'package:flash_chat/Components/rounded_buttons.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'registration_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
-   static const routeName='/welcome';
+  static const routeName = '/welcome';
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateMixin{
-  AnimationController controller; 
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with TickerProviderStateMixin {
+  AnimationController controller;
 
   Animation animation;
-  @override
-    void initState() {
-  
- controller= AnimationController(duration: Duration(seconds: 1), 
- vsync: this,
 
- );
- animation=ColorTween(begin: Colors.blueGrey, end: Colors.white).animate(controller);
- controller.forward();
- controller.addListener(() {
-setState(() { 
-});
- });
-      super.initState();
-    }
-    @override
-      void dispose() {
+  @override
+  void initState() {
+    controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
+        .animate(controller);
+
+    controller.forward();
+    controller.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
     controller.dispose();
-    
-        super.dispose();
-      }
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,59 +55,28 @@ setState(() {
                   tag: 'logo',
                   child: Container(
                     child: Image.asset('images/logo.png'),
-                    height: controller.value*60,
+                    height: controller.value * 60,
                   ),
                 ),
-                Text(
-                  'Flash_Chat',
-                  style: TextStyle(
-                    fontSize: controller.value*40,
-                    fontWeight: FontWeight.w900,
-                  ),
+                AnimatedTextKit(
+                  animatedTexts: [
+                    TypewriterAnimatedText('Flash_Chat',
+                        textStyle: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.w900,
+                        )),
+                  ],
+                  totalRepeatCount: 1,
                 ),
               ],
             ),
-            SizedBox(
+              SizedBox(
               height: 48.0,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-     Navigator.pushNamed(context, LoginScreen.routeName);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Log In',
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    //Go to registration screen.
-                    
-     Navigator.pushNamed(context, RegistrationScreen.routeName);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Register',
-                  ),
-                ),
-              ),
-            ),
+            UiButtons(color: Colors.lightBlueAccent, text: 'Log In', fn: (){Navigator.pushNamed(context, LoginScreen.routeName);},),
+          
+            UiButtons(color: Colors.blueAccent, text: 'Register', fn: (){Navigator.pushNamed(context, RegistrationScreen.routeName);}),
+            
           ],
         ),
       ),

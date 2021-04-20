@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "862360787480",
+    "project_id": "flashchat-db416",
+    "storage_bucket": "flashchat-db416.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862360787480:android:67407bcf055db7b3a9816d",
+        "android_client_info": {
+          "package_name": "com.Mukul.flash_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862360787480-fehs1grt3q725qmjf1c18cg0r28e4ha1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq_Oji7VVQ4Yvhm9qhYMq9Xj4ac8fO4YQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862360787480-fehs1grt3q725qmjf1c18cg0r28e4ha1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
