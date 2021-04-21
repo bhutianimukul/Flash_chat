@@ -54,10 +54,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               SizedBox(
                 height: 40.0,
-              ),Center(
-                child: CircleAvatar(
-                  child: Text('Hello'),
-                ),
               ),
               TextField(
                 controller: emailController,

@@ -21,7 +21,7 @@ class MessageBubble extends StatelessWidget {
       return Text(
         time.toString() + '\n' + date,
         style: TextStyle(
-            color: isMe ? Colors.white : Colors.blueAccent, fontSize: 12),
+            color: isMe ? Colors.white : Colors.lightBlueAccent, fontSize: 12),
       );
     }
 

@@ -1,12 +1,16 @@
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flash_chat/Components/stream_messages.dart';
+import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/scheduler.dart';
+
+
 
   final _firestore = FirebaseFirestore.instance;
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 class ChatScreen extends StatefulWidget {
   static const routeName = '/chat';
   @override
@@ -54,11 +58,14 @@ final messageController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     User loggedInUser = ModalRoute.of(context).settings.arguments;
-final scrollController=ScrollController();
-    print(loggedInUser.email);
+if(loggedInUser==null){
+  loggedInUser=FirebaseAuth.instance.currentUser;
+}
+ 
     return Scaffold(
       
       appBar: AppBar(
+      
         automaticallyImplyLeading: false,
         leading: null,
         actions: <Widget>[
@@ -68,7 +75,7 @@ final scrollController=ScrollController();
                 //Implement logout functionality
                 _auth.signOut();
 
-                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, WelcomeScreen.routeName);
               }),
         ],
         title: Text('⚡️Chat'),
@@ -101,14 +108,15 @@ final scrollController=ScrollController();
                   
                   FlatButton(
                     onPressed: () {
-                      
+                    
+                     
                       _firestore.collection('messages').add(
                           {'sender': loggedInUser.email, 'text': messageText , 'date': Timestamp.now()});
                       //Implement send functionality.
                       messageController.clear();
                      
                     },
-                    child: Text(
+                    child: Text( 
                       'Send',
                       style: kSendButtonTextStyle,
                     ),
